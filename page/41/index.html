@@ -226,7 +226,7 @@
             
 
   
-    <article id="post-butian/从挖矿木马事件到Confluence 远程代码执行漏洞（CVE-2021-26084）分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-butian/双记一次安服仔薅洞实战-前端JS的相爱相杀" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -234,7 +234,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/aggregate-paper/butian/%E4%BB%8E%E6%8C%96%E7%9F%BF%E6%9C%A8%E9%A9%AC%E4%BA%8B%E4%BB%B6%E5%88%B0Confluence%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-26084%EF%BC%89%E5%88%86%E6%9E%90/">从挖矿木马事件到Confluence 远程代码执行漏洞（CVE-2021-26084）分析</a>
+	  <a class="article-title" href="/aggregate-paper/butian/%E5%8F%8C%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AE%89%E6%9C%8D%E4%BB%94%E8%96%85%E6%B4%9E%E5%AE%9E%E6%88%98-%E5%89%8D%E7%AB%AFJS%E7%9A%84%E7%9B%B8%E7%88%B1%E7%9B%B8%E6%9D%80/">双记一次安服仔薅洞实战-前端JS的相爱相杀</a>
 	
     </h1>
   
@@ -242,8 +242,8 @@
 
   
   
-<a href="/aggregate-paper/butian/%E4%BB%8E%E6%8C%96%E7%9F%BF%E6%9C%A8%E9%A9%AC%E4%BA%8B%E4%BB%B6%E5%88%B0Confluence%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-26084%EF%BC%89%E5%88%86%E6%9E%90/" class="archive-article-date">
-        <time datetime="2021-12-13T16:56:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-13</time>
+<a href="/aggregate-paper/butian/%E5%8F%8C%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AE%89%E6%9C%8D%E4%BB%94%E8%96%85%E6%B4%9E%E5%AE%9E%E6%88%98-%E5%89%8D%E7%AB%AFJS%E7%9A%84%E7%9B%B8%E7%88%B1%E7%9B%B8%E6%9D%80/" class="archive-article-date">
+        <time datetime="2022-04-02T15:17:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-02</time>
 </a>
 
   
@@ -255,333 +255,10 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>客户服务器感染挖矿木马，分析后发现是利用Confluence RCE漏洞获取服务器权限，近几个月已经遇到了好几起利用Confluence RCE漏洞进而挖矿的事件，于是准备分析一波漏洞成因。</p>
+    <p>哈喽everyone，我又双回来了，猴子点点的渗透测试工程师这次来分享一个关于前端JS渗透测试的实战教程，这一次也是干公司的项目，老样子还是一个登录框的渗透测试。前端JS通常会泄漏一些接口用于与后台服务器交互，时常会出现未授权或者越权等操作，这一次遇到一个很有意思的接口，下面进入正题吧</p>
 <meta name="referrer" content="no-referrer"/>
     
-    <a class="article-more-a" href="/aggregate-paper/butian/%E4%BB%8E%E6%8C%96%E7%9F%BF%E6%9C%A8%E9%A9%AC%E4%BA%8B%E4%BB%B6%E5%88%B0Confluence%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-26084%EF%BC%89%E5%88%86%E6%9E%90/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">漏洞分析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E4%BB%8E%E6%8C%96%E7%9F%BF%E6%9C%A8%E9%A9%AC%E4%BA%8B%E4%BB%B6%E5%88%B0Confluence%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-26084%EF%BC%89%E5%88%86%E6%9E%90/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/Apache Log4j远程代码执行漏洞（含排查措施和修复建议）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/Apache%20Log4j%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88%E5%90%AB%E6%8E%92%E6%9F%A5%E6%8E%AA%E6%96%BD%E5%92%8C%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%89/">Apache Log4j远程代码执行漏洞（含排查措施和修复建议）</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/Apache%20Log4j%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88%E5%90%AB%E6%8E%92%E6%9F%A5%E6%8E%AA%E6%96%BD%E5%92%8C%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%89/" class="archive-article-date">
-        <time datetime="2021-12-10T23:42:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-10</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>Apache Log4j是Apache的一个开源项目，Apache log4j2是Log4j的升级版本，我们可以控制日志信息输送的目的地为控制台、文件、GUI组件等，通过定义每一条日志信息的级别，能够更加细致地控制日志的生成过程。</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/Apache%20Log4j%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88%E5%90%AB%E6%8E%92%E6%9F%A5%E6%8E%AA%E6%96%BD%E5%92%8C%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%89/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/Apache%20Log4j%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88%E5%90%AB%E6%8E%92%E6%9F%A5%E6%8E%AA%E6%96%BD%E5%92%8C%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%89/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/Log4j2 研究之lookup" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/Log4j2%20%E7%A0%94%E7%A9%B6%E4%B9%8Blookup/">Log4j2 研究之lookup</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/Log4j2%20%E7%A0%94%E7%A9%B6%E4%B9%8Blookup/" class="archive-article-date">
-        <time datetime="2021-12-10T15:53:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-10</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>Lookups provide a way to add values to the Log4j configuration at arbitrary places. They are a particular type of Plugin that implements the StrLookup interface.</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/Log4j2%20%E7%A0%94%E7%A9%B6%E4%B9%8Blookup/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/Log4j2%20%E7%A0%94%E7%A9%B6%E4%B9%8Blookup/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/梦想cms漏洞合集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/%E6%A2%A6%E6%83%B3cms%E6%BC%8F%E6%B4%9E%E5%90%88%E9%9B%86/">梦想cms漏洞合集</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/%E6%A2%A6%E6%83%B3cms%E6%BC%8F%E6%B4%9E%E5%90%88%E9%9B%86/" class="archive-article-date">
-        <time datetime="2021-12-09T14:49:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-09</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>又来审代码了，之前总是倾向于RCE或者文件上传getshell一类的洞，都没怎么看过SQL注入，这回就来看看吧…</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/%E6%A2%A6%E6%83%B3cms%E6%BC%8F%E6%B4%9E%E5%90%88%E9%9B%86/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E6%A2%A6%E6%83%B3cms%E6%BC%8F%E6%B4%9E%E5%90%88%E9%9B%86/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/CVE-2021-43527 Mozilla加密库NSS存在一个简单却很严重的缓存溢出漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/CVE-2021-43527%20Mozilla%E5%8A%A0%E5%AF%86%E5%BA%93NSS%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%8D%B4%E5%BE%88%E4%B8%A5%E9%87%8D%E7%9A%84%E7%BC%93%E5%AD%98%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/">CVE-2021-43527 Mozilla加密库NSS存在一个简单却很严重的缓存溢出漏洞</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/CVE-2021-43527%20Mozilla%E5%8A%A0%E5%AF%86%E5%BA%93NSS%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%8D%B4%E5%BE%88%E4%B8%A5%E9%87%8D%E7%9A%84%E7%BC%93%E5%AD%98%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/" class="archive-article-date">
-        <time datetime="2021-12-08T14:47:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-08</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>Mozilla加密库NSS存在一个简单却很严重的缓存溢出漏洞，NSS 是一个类似OpenSSL的密码学库，由Mozilla公司开发维护，广泛应用于Firefox 、Thunderbird、LibreOffice等一些常用的软件当中。</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/CVE-2021-43527%20Mozilla%E5%8A%A0%E5%AF%86%E5%BA%93NSS%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%8D%B4%E5%BE%88%E4%B8%A5%E9%87%8D%E7%9A%84%E7%BC%93%E5%AD%98%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/#more">more >></a>
+    <a class="article-more-a" href="/aggregate-paper/butian/%E5%8F%8C%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AE%89%E6%9C%8D%E4%BB%94%E8%96%85%E6%B4%9E%E5%AE%9E%E6%88%98-%E5%89%8D%E7%AB%AFJS%E7%9A%84%E7%9B%B8%E7%88%B1%E7%9B%B8%E6%9D%80/#more">more >></a>
     
     
 
@@ -608,7 +285,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/CVE-2021-43527%20Mozilla%E5%8A%A0%E5%AF%86%E5%BA%93NSS%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%8D%B4%E5%BE%88%E4%B8%A5%E9%87%8D%E7%9A%84%E7%BC%93%E5%AD%98%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/">展开全文 >></a>
+      <a class="article-more-a" href="/aggregate-paper/butian/%E5%8F%8C%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AE%89%E6%9C%8D%E4%BB%94%E8%96%85%E6%B4%9E%E5%AE%9E%E6%88%98-%E5%89%8D%E7%AB%AFJS%E7%9A%84%E7%9B%B8%E7%88%B1%E7%9B%B8%E6%9D%80/">展开全文 >></a>
     </p>
     
 
@@ -638,7 +315,7 @@
 
 
   
-    <article id="post-butian/关于抓取明文密码的探究" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-butian/代码审计之上传自解压漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -646,7 +323,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8E%E6%8A%93%E5%8F%96%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E7%9A%84%E6%8E%A2%E7%A9%B6/">关于抓取明文密码的探究</a>
+	  <a class="article-title" href="/aggregate-paper/butian/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%B9%8B%E4%B8%8A%E4%BC%A0%E8%87%AA%E8%A7%A3%E5%8E%8B%E6%BC%8F%E6%B4%9E/">代码审计之上传自解压漏洞</a>
 	
     </h1>
   
@@ -654,8 +331,8 @@
 
   
   
-<a href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8E%E6%8A%93%E5%8F%96%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E7%9A%84%E6%8E%A2%E7%A9%B6/" class="archive-article-date">
-        <time datetime="2021-12-07T15:09:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-07</time>
+<a href="/aggregate-paper/butian/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%B9%8B%E4%B8%8A%E4%BC%A0%E8%87%AA%E8%A7%A3%E5%8E%8B%E6%BC%8F%E6%B4%9E/" class="archive-article-date">
+        <time datetime="2022-04-02T13:41:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-02</time>
 </a>
 
   
@@ -667,266 +344,10 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p> 基础知识SSP（Security Support Provider）是windows操作系统安全机制的提供者。简单的说，SSP就是DLL文件，主要用于windows操作系统的身份认证功能，例如NTLM、Kerberos、Negotiate…</p>
+    <p>最近在学习java代码审计, 这两天看了一篇Java审计文章后, 举一反三, 写了本篇文章. 上传自解压漏洞是一个容易被 大家忽略的漏洞, 一些网站对上传功能进行了黑白名单过滤, 但当网站有一些上传压缩包功能需求的时候, 就可能忽 略解压后的文件是否为恶意文件, 进而可能产生漏洞.</p>
 <meta name="referrer" content="no-referrer"/>
     
-    <a class="article-more-a" href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8E%E6%8A%93%E5%8F%96%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E7%9A%84%E6%8E%A2%E7%A9%B6/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8E%E6%8A%93%E5%8F%96%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E7%9A%84%E6%8E%A2%E7%A9%B6/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/0元购买某游戏648元点券" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/0%E5%85%83%E8%B4%AD%E4%B9%B0%E6%9F%90%E6%B8%B8%E6%88%8F648%E5%85%83%E7%82%B9%E5%88%B8/">0元购买某游戏648元点券</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/0%E5%85%83%E8%B4%AD%E4%B9%B0%E6%9F%90%E6%B8%B8%E6%88%8F648%E5%85%83%E7%82%B9%E5%88%B8/" class="archive-article-date">
-        <time datetime="2021-12-07T14:43:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-07</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p> 前言在游戏中要想玩的畅快，免不了装备的购买，而前提是要有足够的点券支撑。本文将对某游戏，实现0元购买648元点券，仅供学习使用。 购买点券点券购买界面如图所示。[![](htt…</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/0%E5%85%83%E8%B4%AD%E4%B9%B0%E6%9F%90%E6%B8%B8%E6%88%8F648%E5%85%83%E7%82%B9%E5%88%B8/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">移动安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/0%E5%85%83%E8%B4%AD%E4%B9%B0%E6%9F%90%E6%B8%B8%E6%88%8F648%E5%85%83%E7%82%B9%E5%88%B8/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/Serverless扫描技术研究及应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/Serverless%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6%E5%8F%8A%E5%BA%94%E7%94%A8/">Serverless扫描技术研究及应用</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/Serverless%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6%E5%8F%8A%E5%BA%94%E7%94%A8/" class="archive-article-date">
-        <time datetime="2021-12-06T22:55:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-06</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>大家好，我是风起，本次给大家分享的是Serverless扫描技术也是我在SecTime沙龙演讲时讲到的一种隐匿扫描技术，通过Serverless（云函数）实现各种扫描器探测功能，以达到绕过态势感知、WAF等安全设备，增大蓝队研判人员溯源难度，实现封无可封，查无可查的效果。希望大家通过阅读本文能够有所收获，那么下面由我来给大家揭秘这个有趣的攻击方式吧。</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/Serverless%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6%E5%8F%8A%E5%BA%94%E7%94%A8/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">渗透测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/Serverless%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6%E5%8F%8A%E5%BA%94%E7%94%A8/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/TeamTNT挖矿程序分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/TeamTNT%E6%8C%96%E7%9F%BF%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/">TeamTNT挖矿程序分析</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/TeamTNT%E6%8C%96%E7%9F%BF%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/" class="archive-article-date">
-        <time datetime="2021-12-06T14:48:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-06</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>开局一张图，内容全靠编~</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/TeamTNT%E6%8C%96%E7%9F%BF%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/#more">more >></a>
+    <a class="article-more-a" href="/aggregate-paper/butian/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%B9%8B%E4%B8%8A%E4%BC%A0%E8%87%AA%E8%A7%A3%E5%8E%8B%E6%BC%8F%E6%B4%9E/#more">more >></a>
     
     
 
@@ -953,7 +374,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/TeamTNT%E6%8C%96%E7%9F%BF%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/">展开全文 >></a>
+      <a class="article-more-a" href="/aggregate-paper/butian/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%B9%8B%E4%B8%8A%E4%BC%A0%E8%87%AA%E8%A7%A3%E5%8E%8B%E6%BC%8F%E6%B4%9E/">展开全文 >></a>
     </p>
     
 
@@ -983,7 +404,7 @@
 
 
   
-    <article id="post-butian/Go语言代码审计实战" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-butian/php绕过某防护软件执行系统命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -991,7 +412,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/aggregate-paper/butian/Go%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/">Go语言代码审计实战</a>
+	  <a class="article-title" href="/aggregate-paper/butian/php%E7%BB%95%E8%BF%87%E6%9F%90%E9%98%B2%E6%8A%A4%E8%BD%AF%E4%BB%B6%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4/">php绕过某防护软件执行系统命令</a>
 	
     </h1>
   
@@ -999,8 +420,8 @@
 
   
   
-<a href="/aggregate-paper/butian/Go%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/" class="archive-article-date">
-        <time datetime="2021-12-03T23:11:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-03</time>
+<a href="/aggregate-paper/butian/php%E7%BB%95%E8%BF%87%E6%9F%90%E9%98%B2%E6%8A%A4%E8%BD%AF%E4%BB%B6%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+        <time datetime="2022-04-02T13:38:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-02</time>
 </a>
 
   
@@ -1012,10 +433,188 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>java很卷，刚好周末有空，来看一下go，就写下了这个。</p>
+    <p>php绕过某防护软件执行系统命令</p>
 <meta name="referrer" content="no-referrer"/>
     
-    <a class="article-more-a" href="/aggregate-paper/butian/Go%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/#more">more >></a>
+    <a class="article-more-a" href="/aggregate-paper/butian/php%E7%BB%95%E8%BF%87%E6%9F%90%E9%98%B2%E6%8A%A4%E8%BD%AF%E4%BB%B6%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">渗透测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/php%E7%BB%95%E8%BF%87%E6%9F%90%E9%98%B2%E6%8A%A4%E8%BD%AF%E4%BB%B6%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/内网渗透测试之流量加密" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E6%B5%81%E9%87%8F%E5%8A%A0%E5%AF%86/">内网渗透测试之流量加密</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E6%B5%81%E9%87%8F%E5%8A%A0%E5%AF%86/" class="archive-article-date">
+        <time datetime="2022-04-01T21:31:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-01</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>当攻击方在后渗透阶段需要进行横向渗透时，通常需要反弹shell，如果咱们反弹shell都是明文传输的话，内网的IDS等安全设备会对流量进行分析，检测到有恶意行为，防守方会通过安全设备对攻击流量进行溯源分析，攻击行为就会暴露，因此需要对流量进行加密。</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E6%B5%81%E9%87%8F%E5%8A%A0%E5%AF%86/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">渗透测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E6%B5%81%E9%87%8F%E5%8A%A0%E5%AF%86/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/python批量化提交100+shell" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/python%E6%89%B9%E9%87%8F%E5%8C%96%E6%8F%90%E4%BA%A4100+shell/">python批量化提交100+shell</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/python%E6%89%B9%E9%87%8F%E5%8C%96%E6%8F%90%E4%BA%A4100+shell/" class="archive-article-date">
+        <time datetime="2022-04-01T21:30:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-01</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>前段时间，在写批量化挖掘的脚本，现在已经收工了，大概也就100+shell左右，用来练手的其余sql注入，未授权都交给公益src了。</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/python%E6%89%B9%E9%87%8F%E5%8C%96%E6%8F%90%E4%BA%A4100+shell/#more">more >></a>
     
     
 
@@ -1031,7 +630,452 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/Go%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/">展开全文 >></a>
+      <a class="article-more-a" href="/aggregate-paper/butian/python%E6%89%B9%E9%87%8F%E5%8C%96%E6%8F%90%E4%BA%A4100+shell/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/跟上时代之高版本GLIBC下堆利用（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E8%B7%9F%E4%B8%8A%E6%97%B6%E4%BB%A3%E4%B9%8B%E9%AB%98%E7%89%88%E6%9C%ACGLIBC%E4%B8%8B%E5%A0%86%E5%88%A9%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/">跟上时代之高版本GLIBC下堆利用（一）</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E8%B7%9F%E4%B8%8A%E6%97%B6%E4%BB%A3%E4%B9%8B%E9%AB%98%E7%89%88%E6%9C%ACGLIBC%E4%B8%8B%E5%A0%86%E5%88%A9%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="archive-article-date">
+        <time datetime="2022-04-01T13:43:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-01</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p> 前言越来越卷，只能这么说了，现在高版本下的利用方式越来越难，甚至有的比赛直接算是全部上kernel。然后新手小白感到这个年代的pwn手并不适合生存。算了，比赛是比赛，总之还是需要生…</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E8%B7%9F%E4%B8%8A%E6%97%B6%E4%BB%A3%E4%B9%8B%E9%AB%98%E7%89%88%E6%9C%ACGLIBC%E4%B8%8B%E5%A0%86%E5%88%A9%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CTF</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E8%B7%9F%E4%B8%8A%E6%97%B6%E4%BB%A3%E4%B9%8B%E9%AB%98%E7%89%88%E6%9C%ACGLIBC%E4%B8%8B%E5%A0%86%E5%88%A9%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/Spring Cloud Function SPEL表达式注入漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/Spring%20Cloud%20Function%20SPEL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/">Spring Cloud Function SPEL表达式注入漏洞</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/Spring%20Cloud%20Function%20SPEL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/" class="archive-article-date">
+        <time datetime="2022-03-31T13:43:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-31</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>Spring Cloud Function 是基于 Spring Boot 的函数计算框架，它抽象出所有传输细节和基础架构，允许开发人员保留所有熟悉的工具和流程，并专注于业务逻辑。Spring Cloud Function 被爆出了 SPEL 表达式注入漏洞</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/Spring%20Cloud%20Function%20SPEL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">漏洞分析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/Spring%20Cloud%20Function%20SPEL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/一个略绕的NjRat 样本简析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E4%B8%80%E4%B8%AA%E7%95%A5%E7%BB%95%E7%9A%84NjRat%20%E6%A0%B7%E6%9C%AC%E7%AE%80%E6%9E%90/">一个略绕的NjRat 样本简析</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E4%B8%80%E4%B8%AA%E7%95%A5%E7%BB%95%E7%9A%84NjRat%20%E6%A0%B7%E6%9C%AC%E7%AE%80%E6%9E%90/" class="archive-article-date">
+        <time datetime="2022-03-30T13:42:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-30</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>在每日摸鱼时光中，找点样本分析一下是划水最好的方式，这一次又看到一个NjRat 样本，简单分析了一下，发现有点意思，让后被cue 要写详细一点，嘎嘎嘎，不多说，开摆。</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E4%B8%80%E4%B8%AA%E7%95%A5%E7%BB%95%E7%9A%84NjRat%20%E6%A0%B7%E6%9C%AC%E7%AE%80%E6%9E%90/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">划水摸鱼</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E4%B8%80%E4%B8%AA%E7%95%A5%E7%BB%95%E7%9A%84NjRat%20%E6%A0%B7%E6%9C%AC%E7%AE%80%E6%9E%90/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/DASCTF SU三月赛 WriteUp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/DASCTF%20SU%E4%B8%89%E6%9C%88%E8%B5%9B%20WriteUp/">DASCTF SU三月赛 WriteUp</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/DASCTF%20SU%E4%B8%89%E6%9C%88%E8%B5%9B%20WriteUp/" class="archive-article-date">
+        <time datetime="2022-03-30T13:36:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-30</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>DASCTF SU三月赛 WriteUp</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/DASCTF%20SU%E4%B8%89%E6%9C%88%E8%B5%9B%20WriteUp/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CTF</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/DASCTF%20SU%E4%B8%89%E6%9C%88%E8%B5%9B%20WriteUp/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/初探smc动态代码保护" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E5%88%9D%E6%8E%A2smc%E5%8A%A8%E6%80%81%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/">初探smc动态代码保护</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E5%88%9D%E6%8E%A2smc%E5%8A%A8%E6%80%81%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/" class="archive-article-date">
+        <time datetime="2022-03-29T13:41:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-29</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>SMC，即Self Modifying Code，动态代码加密技术，指通过修改代码或数据，阻止别人直接静态分析，然后在动态运行程序时对代码进行解密，达到程序正常运行的效果，而计算机病毒通常也会采用SMC技术动态修改内存中的可执行代码来达到变形或对代码加密的目的，从而躲过杀毒软件的查杀或者迷惑反病毒工作者对代码进行分析。</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E5%88%9D%E6%8E%A2smc%E5%8A%A8%E6%80%81%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CTF</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E5%88%9D%E6%8E%A2smc%E5%8A%A8%E6%80%81%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/">展开全文 >></a>
     </p>
     
 
@@ -1063,7 +1107,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/aggregate-paper/page/40/">&amp;laquo; Prev</a><a class="page-number" href="/aggregate-paper/">1</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/39/">39</a><a class="page-number" href="/aggregate-paper/page/40/">40</a><span class="page-number current">41</span><a class="page-number" href="/aggregate-paper/page/42/">42</a><a class="page-number" href="/aggregate-paper/page/43/">43</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/89/">89</a><a class="extend next" rel="next" href="/aggregate-paper/page/42/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/aggregate-paper/page/40/">&amp;laquo; Prev</a><a class="page-number" href="/aggregate-paper/">1</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/39/">39</a><a class="page-number" href="/aggregate-paper/page/40/">40</a><span class="page-number current">41</span><a class="page-number" href="/aggregate-paper/page/42/">42</a><a class="page-number" href="/aggregate-paper/page/43/">43</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/104/">104</a><a class="extend next" rel="next" href="/aggregate-paper/page/42/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1202,6 +1246,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">区块链安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">安全技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">众测渗透</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">技术讨论</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">WEB安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">二进制安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">企业安全</a>
               </li>
             
             <div class="clearfix"></div>

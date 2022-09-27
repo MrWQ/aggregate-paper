@@ -226,7 +226,7 @@
             
 
   
-    <article id="post-butian/Redis渗透方法汇总" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-butian/CMsuno1.6.2远程代码执行分析复现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -234,7 +234,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/aggregate-paper/butian/Redis%E6%B8%97%E9%80%8F%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/">Redis渗透方法汇总</a>
+	  <a class="article-title" href="/aggregate-paper/butian/CMsuno1.6.2%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/">CMsuno1.6.2远程代码执行分析复现</a>
 	
     </h1>
   
@@ -242,8 +242,8 @@
 
   
   
-<a href="/aggregate-paper/butian/Redis%E6%B8%97%E9%80%8F%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/" class="archive-article-date">
-        <time datetime="2021-07-29T18:59:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-29</time>
+<a href="/aggregate-paper/butian/CMsuno1.6.2%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/" class="archive-article-date">
+        <time datetime="2021-09-14T15:01:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-14</time>
 </a>
 
   
@@ -255,10 +255,455 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>Redis总结</p>
+    <p> 前言CMSUno是法国Jacques Malgrange软件开发者的一款用于创建单页响应式网站的工具  下文是基于对EXP的分析得来的，EXP原作者Fatih Çelik，另外为了方便分析复现，对EXP做了小幅度的修改…</p>
 <meta name="referrer" content="no-referrer"/>
     
-    <a class="article-more-a" href="/aggregate-paper/butian/Redis%E6%B8%97%E9%80%8F%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/#more">more >></a>
+    <a class="article-more-a" href="/aggregate-paper/butian/CMsuno1.6.2%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">漏洞分析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/CMsuno1.6.2%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/移动安全Android逆向系列：Dalvik概念&amp;破解实例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9ADalvik%E6%A6%82%E5%BF%B5&%E7%A0%B4%E8%A7%A3%E5%AE%9E%E4%BE%8B/">移动安全Android逆向系列：Dalvik概念&amp;amp;amp;破解实例</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9ADalvik%E6%A6%82%E5%BF%B5&%E7%A0%B4%E8%A7%A3%E5%AE%9E%E4%BE%8B/" class="archive-article-date">
+        <time datetime="2021-09-14T14:45:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-14</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>本篇文章是Android逆向系列的第三篇，开始介绍Dalvik虚拟机的相关知识，认识dex和smali文件格式和熟悉Dalvik字节码及指令集，对Dalvik指令集有个大概的了解就可以开始简单的反编译静态分析了，</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9ADalvik%E6%A6%82%E5%BF%B5&%E7%A0%B4%E8%A7%A3%E5%AE%9E%E4%BE%8B/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">移动安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9ADalvik%E6%A6%82%E5%BF%B5&%E7%A0%B4%E8%A7%A3%E5%AE%9E%E4%BE%8B/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/移动安全Android逆向系列：基本概念&amp;环境配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5&%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">移动安全Android逆向系列：基本概念&amp;amp;amp;环境配置</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5&%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="archive-article-date">
+        <time datetime="2021-09-13T18:29:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-13</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>本篇文章是Android逆向系列的第一篇，简单介绍下Android的概念包括apk结构、虚拟机和apk的打包流程，详细描述搭建安卓逆向的环境，包括部分Android工具包及逆向工具，最后再简单上手Androi…</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5&%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">移动安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5&%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/移动安全Android逆向系列：安卓工具总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%AE%89%E5%8D%93%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/">移动安全Android逆向系列：安卓工具总结</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%AE%89%E5%8D%93%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/" class="archive-article-date">
+        <time datetime="2021-09-13T14:18:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-13</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>本篇文章是Android逆向系列的第二篇，是一篇安卓工具的总结，涉及到开发工具、逆向分析工具、动态调试工具、安卓模拟器和抓包工具五个部分。</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%AE%89%E5%8D%93%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">移动安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8Android%E9%80%86%E5%90%91%E7%B3%BB%E5%88%97%EF%BC%9A%E5%AE%89%E5%8D%93%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/zzcms的在一次审计" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/zzcms%E7%9A%84%E5%9C%A8%E4%B8%80%E6%AC%A1%E5%AE%A1%E8%AE%A1/">zzcms的在一次审计</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/zzcms%E7%9A%84%E5%9C%A8%E4%B8%80%E6%AC%A1%E5%AE%A1%E8%AE%A1/" class="archive-article-date">
+        <time datetime="2021-09-10T18:14:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-10</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p> 前言在看了社区https&#x2F;&#x2F;forum.butian.net&#x2F;share&#x2F;460师傅的文章后 找师傅要到源码 然后在次对zzcms发起了审计 审计开始首先打开页面 [![](https&#x2F;&#x2F;shs3.b.qianxin.com&#x2F;attack_f…</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/zzcms%E7%9A%84%E5%9C%A8%E4%B8%80%E6%AC%A1%E5%AE%A1%E8%AE%A1/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">漏洞分析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/zzcms%E7%9A%84%E5%9C%A8%E4%B8%80%E6%AC%A1%E5%AE%A1%E8%AE%A1/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/内网工具 LCX 之旧瓶装新酒" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E5%B7%A5%E5%85%B7%20LCX%20%E4%B9%8B%E6%97%A7%E7%93%B6%E8%A3%85%E6%96%B0%E9%85%92/">内网工具 LCX 之旧瓶装新酒</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E5%B7%A5%E5%85%B7%20LCX%20%E4%B9%8B%E6%97%A7%E7%93%B6%E8%A3%85%E6%96%B0%E9%85%92/" class="archive-article-date">
+        <time datetime="2021-09-10T14:01:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-10</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>本文主要从老牌开源内网工具 LCX ，来介绍一些常见的源码免杀技巧及知识。</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E5%B7%A5%E5%85%B7%20LCX%20%E4%B9%8B%E6%97%A7%E7%93%B6%E8%A3%85%E6%96%B0%E9%85%92/#more">more >></a>
     
     
 
@@ -285,7 +730,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/Redis%E6%B8%97%E9%80%8F%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/">展开全文 >></a>
+      <a class="article-more-a" href="/aggregate-paper/butian/%E5%86%85%E7%BD%91%E5%B7%A5%E5%85%B7%20LCX%20%E4%B9%8B%E6%97%A7%E7%93%B6%E8%A3%85%E6%96%B0%E9%85%92/">展开全文 >></a>
     </p>
     
 
@@ -315,7 +760,7 @@
 
 
   
-    <article id="post-butian/bluecms1.6sp1代码审计+一键getshellpoc编写" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-butian/从RFC看如何使用Base64编码绕过WAF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -323,7 +768,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/aggregate-paper/butian/bluecms1.6sp1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1+%E4%B8%80%E9%94%AEgetshellpoc%E7%BC%96%E5%86%99/">bluecms1.6sp1代码审计+一键getshellpoc编写</a>
+	  <a class="article-title" href="/aggregate-paper/butian/%E4%BB%8ERFC%E7%9C%8B%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Base64%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87WAF/">从RFC看如何使用Base64编码绕过WAF</a>
 	
     </h1>
   
@@ -331,8 +776,8 @@
 
   
   
-<a href="/aggregate-paper/butian/bluecms1.6sp1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1+%E4%B8%80%E9%94%AEgetshellpoc%E7%BC%96%E5%86%99/" class="archive-article-date">
-        <time datetime="2021-07-29T18:55:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-29</time>
+<a href="/aggregate-paper/butian/%E4%BB%8ERFC%E7%9C%8B%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Base64%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87WAF/" class="archive-article-date">
+        <time datetime="2021-09-09T20:27:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-09</time>
 </a>
 
   
@@ -344,10 +789,88 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>入行代码审计以及POC漏洞利用脚本编写,POC提供简单思路,包括基本的参数设置,爬虫等,未进行函数封装以及异常处理,主要是提供新手的思路,表哥们和我一起学习进步把！</p>
+    <p>本文将查看RFC4648对于base64编码的规范，并选取多种base64解码器分析其在实现上的不规范性，并如何通过这种不规范来绕过WAF。</p>
 <meta name="referrer" content="no-referrer"/>
     
-    <a class="article-more-a" href="/aggregate-paper/butian/bluecms1.6sp1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1+%E4%B8%80%E9%94%AEgetshellpoc%E7%BC%96%E5%86%99/#more">more >></a>
+    <a class="article-more-a" href="/aggregate-paper/butian/%E4%BB%8ERFC%E7%9C%8B%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Base64%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87WAF/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/aggregate-paper/butian/%E4%BB%8ERFC%E7%9C%8B%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Base64%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87WAF/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-butian/某商城代码审计" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/aggregate-paper/butian/%E6%9F%90%E5%95%86%E5%9F%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">某商城代码审计</a>
+	
+    </h1>
+  
+
+
+  
+  
+<a href="/aggregate-paper/butian/%E6%9F%90%E5%95%86%E5%9F%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="archive-article-date">
+        <time datetime="2021-09-08T21:07:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-08</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p> 菜鸡的第二次审计 审计开始 第一处：先来到admin.php页面  先不登录 [![](https&#x2F;&#x2F;shs3.b.qianxin.com&#x2F;attack_forum&#x2F;2021&#x2F;09&#x2F;attach-dc7aaa854fdb5063a7faa9a80cd6ad491…</p>
+<meta name="referrer" content="no-referrer"/>
+    
+    <a class="article-more-a" href="/aggregate-paper/butian/%E6%9F%90%E5%95%86%E5%9F%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/#more">more >></a>
     
     
 
@@ -374,7 +897,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/bluecms1.6sp1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1+%E4%B8%80%E9%94%AEgetshellpoc%E7%BC%96%E5%86%99/">展开全文 >></a>
+      <a class="article-more-a" href="/aggregate-paper/butian/%E6%9F%90%E5%95%86%E5%9F%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">展开全文 >></a>
     </p>
     
 
@@ -404,7 +927,7 @@
 
 
   
-    <article id="post-butian/缘起XSS之与某WAF的恩爱情仇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-butian/关于Kerberos认证的一些攻击手法学习总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -412,7 +935,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/aggregate-paper/butian/%E7%BC%98%E8%B5%B7XSS%E4%B9%8B%E4%B8%8E%E6%9F%90WAF%E7%9A%84%E6%81%A9%E7%88%B1%E6%83%85%E4%BB%87/">缘起XSS之与某WAF的恩爱情仇</a>
+	  <a class="article-title" href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8EKerberos%E8%AE%A4%E8%AF%81%E7%9A%84%E4%B8%80%E4%BA%9B%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">关于Kerberos认证的一些攻击手法学习总结</a>
 	
     </h1>
   
@@ -420,8 +943,8 @@
 
   
   
-<a href="/aggregate-paper/butian/%E7%BC%98%E8%B5%B7XSS%E4%B9%8B%E4%B8%8E%E6%9F%90WAF%E7%9A%84%E6%81%A9%E7%88%B1%E6%83%85%E4%BB%87/" class="archive-article-date">
-        <time datetime="2021-07-29T18:49:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-29</time>
+<a href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8EKerberos%E8%AE%A4%E8%AF%81%E7%9A%84%E4%B8%80%E4%BA%9B%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="archive-article-date">
+        <time datetime="2021-09-07T14:24:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-07</time>
 </a>
 
   
@@ -433,10 +956,10 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p> 缘起XSS之与腾讯T-SEC WAF的恩爱情仇 0x0 前言&amp;amp;emsp;&amp;amp;emsp;在现在waf遍地的时代，在挖掘SRC的时候XSS类型的漏洞不免都得绕一番。不得不感叹，近几年的waf发展是越来越快了…</p>
+    <p>本文主要分享最近学习的关于域内Kerberos认证的一些攻击手法，以自我的理解为主，从原理理解切入到基本工具利用来阐述</p>
 <meta name="referrer" content="no-referrer"/>
     
-    <a class="article-more-a" href="/aggregate-paper/butian/%E7%BC%98%E8%B5%B7XSS%E4%B9%8B%E4%B8%8E%E6%9F%90WAF%E7%9A%84%E6%81%A9%E7%88%B1%E6%83%85%E4%BB%87/#more">more >></a>
+    <a class="article-more-a" href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8EKerberos%E8%AE%A4%E8%AF%81%E7%9A%84%E4%B8%80%E4%BA%9B%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/#more">more >></a>
     
     
 
@@ -463,7 +986,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E7%BC%98%E8%B5%B7XSS%E4%B9%8B%E4%B8%8E%E6%9F%90WAF%E7%9A%84%E6%81%A9%E7%88%B1%E6%83%85%E4%BB%87/">展开全文 >></a>
+      <a class="article-more-a" href="/aggregate-paper/butian/%E5%85%B3%E4%BA%8EKerberos%E8%AE%A4%E8%AF%81%E7%9A%84%E4%B8%80%E4%BA%9B%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">展开全文 >></a>
     </p>
     
 
@@ -493,7 +1016,7 @@
 
 
   
-    <article id="post-butian/某客户关系管理系统代码审计" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-butian/CVE-2020-36239 - Jira 多款产品RCE漏洞分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -501,7 +1024,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/aggregate-paper/butian/%E6%9F%90%E5%AE%A2%E6%88%B7%E5%85%B3%E7%B3%BB%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">某客户关系管理系统代码审计</a>
+	  <a class="article-title" href="/aggregate-paper/butian/CVE-2020-36239%20-%20Jira%20%E5%A4%9A%E6%AC%BE%E4%BA%A7%E5%93%81RCE%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">CVE-2020-36239 - Jira 多款产品RCE漏洞分析</a>
 	
     </h1>
   
@@ -509,8 +1032,8 @@
 
   
   
-<a href="/aggregate-paper/butian/%E6%9F%90%E5%AE%A2%E6%88%B7%E5%85%B3%E7%B3%BB%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="archive-article-date">
-        <time datetime="2021-07-28T16:04:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-28</time>
+<a href="/aggregate-paper/butian/CVE-2020-36239%20-%20Jira%20%E5%A4%9A%E6%AC%BE%E4%BA%A7%E5%93%81RCE%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="archive-article-date">
+        <time datetime="2021-09-06T21:55:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-06</time>
 </a>
 
   
@@ -522,10 +1045,10 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>PHP CMS 代码审计实战，RCE, SQL注入，任意文件删除，任意文件上传。</p>
+    <p>2021 年 7 月 9 日上午 544 Jira 官方发布公告 《Jira 数据中心和 Jira 服务管理数据中心 - Ehcache RMI 缺少身份验证 - CVE-2020-36239(https&#x2F;&#x2F;jira.atlassian.com&#x2F;browse&#x2F;JSDSERVER-8454)》, 该漏洞影响多个产品的多个版本,官方已给出修复方法。详细请关注 Jira 官网，将软件更新至安全版本 https&#x2F;&#x2F;jira.atlassian.com&#x2F;</p>
 <meta name="referrer" content="no-referrer"/>
     
-    <a class="article-more-a" href="/aggregate-paper/butian/%E6%9F%90%E5%AE%A2%E6%88%B7%E5%85%B3%E7%B3%BB%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/#more">more >></a>
+    <a class="article-more-a" href="/aggregate-paper/butian/CVE-2020-36239%20-%20Jira%20%E5%A4%9A%E6%AC%BE%E4%BA%A7%E5%93%81RCE%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/#more">more >></a>
     
     
 
@@ -552,541 +1075,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E6%9F%90%E5%AE%A2%E6%88%B7%E5%85%B3%E7%B3%BB%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/记一次代码审计过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B/">记一次代码审计过程</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B/" class="archive-article-date">
-        <time datetime="2021-07-28T14:49:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-28</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p> 记一次代码审计过程 前言以下内容仅供技术研究学习使用！严禁用于非法操作！由于本人比较菜，只能审计一些小cms，如果有什么错误或者见识浅薄的地方师傅们帮忙指出下。 正文…</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">漏洞分析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/DIY 苹果无线充电绕过手机充电认证（I）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/DIY%20%E8%8B%B9%E6%9E%9C%E6%97%A0%E7%BA%BF%E5%85%85%E7%94%B5%E7%BB%95%E8%BF%87%E6%89%8B%E6%9C%BA%E5%85%85%E7%94%B5%E8%AE%A4%E8%AF%81%EF%BC%88I%EF%BC%89/">DIY 苹果无线充电绕过手机充电认证（I）</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/DIY%20%E8%8B%B9%E6%9E%9C%E6%97%A0%E7%BA%BF%E5%85%85%E7%94%B5%E7%BB%95%E8%BF%87%E6%89%8B%E6%9C%BA%E5%85%85%E7%94%B5%E8%AE%A4%E8%AF%81%EF%BC%88I%EF%BC%89/" class="archive-article-date">
-        <time datetime="2021-07-28T13:39:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-28</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>这篇文章主要讲述从电路层面解析、复刻整个无线充电过程。希望可以为奋斗在破解无线充电协议的大佬们提供一些启发。同时，讲述一种纯硬件方法。</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/DIY%20%E8%8B%B9%E6%9E%9C%E6%97%A0%E7%BA%BF%E5%85%85%E7%94%B5%E7%BB%95%E8%BF%87%E6%89%8B%E6%9C%BA%E5%85%85%E7%94%B5%E8%AE%A4%E8%AF%81%EF%BC%88I%EF%BC%89/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">硬件与物联网</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/DIY%20%E8%8B%B9%E6%9E%9C%E6%97%A0%E7%BA%BF%E5%85%85%E7%94%B5%E7%BB%95%E8%BF%87%E6%89%8B%E6%9C%BA%E5%85%85%E7%94%B5%E8%AE%A4%E8%AF%81%EF%BC%88I%EF%BC%89/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/瞬态执行漏洞之Spectre V1篇（下）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/%E7%9E%AC%E6%80%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E4%B9%8BSpectre%20V1%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89/">瞬态执行漏洞之Spectre V1篇（下）</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/%E7%9E%AC%E6%80%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E4%B9%8BSpectre%20V1%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89/" class="archive-article-date">
-        <time datetime="2021-07-27T14:41:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-27</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>在上一篇文章中，我们为读者介绍基于推测机制的瞬态执行漏洞的相关概念和原理进行了详细的介绍，在本文中，我们将深入分析Spectre V1的PoC源码。</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/%E7%9E%AC%E6%80%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E4%B9%8BSpectre%20V1%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">漏洞分析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E7%9E%AC%E6%80%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E4%B9%8BSpectre%20V1%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/某网络安全设备逻辑缺陷导致get shell" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/%E6%9F%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7%E5%AF%BC%E8%87%B4get%20shell/">某网络安全设备逻辑缺陷导致get shell</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/%E6%9F%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7%E5%AF%BC%E8%87%B4get%20shell/" class="archive-article-date">
-        <time datetime="2021-07-27T14:41:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-27</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p> 写在前面听某位师傅说cnvd的证书对就业有帮助，特别是安全厂商类型的cnvd证书含金量更高。听到这里，我便开始跃跃欲试，便有了此篇文章出现。本篇文章就来讲讲这次挖掘安全厂商产品0day通用…</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/%E6%9F%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7%E5%AF%BC%E8%87%B4get%20shell/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">渗透测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E6%9F%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7%E5%AF%BC%E8%87%B4get%20shell/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/自动化xss检测工具及其利用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/%E8%87%AA%E5%8A%A8%E5%8C%96xss%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E5%8F%8A%E5%85%B6%E5%88%A9%E7%94%A8/">自动化xss检测工具及其利用</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/%E8%87%AA%E5%8A%A8%E5%8C%96xss%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E5%8F%8A%E5%85%B6%E5%88%A9%E7%94%A8/" class="archive-article-date">
-        <time datetime="2021-07-27T14:41:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-27</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>XSS注入漏洞又称为&quot;跨站脚本攻击(Cross Site Scripting)&quot;，为了不和层叠样式表(Cascading Style Sheets,CSS)混淆，所以将跨站脚本攻击缩写为XSS。XSS注入攻击的原理其实和sql注入攻击的原理很相似，攻击者将恶意的Script代码插入到网页中，当正常用户浏览该页面时，被嵌入的恶意Script代码就会被执行，从而达到恶意攻击正常用户的目的。</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/%E8%87%AA%E5%8A%A8%E5%8C%96xss%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E5%8F%8A%E5%85%B6%E5%88%A9%E7%94%A8/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">安全工具</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/%E8%87%AA%E5%8A%A8%E5%8C%96xss%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7%E5%8F%8A%E5%85%B6%E5%88%A9%E7%94%A8/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-butian/Chrome V8基础（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/aggregate-paper/butian/Chrome%20V8%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/">Chrome V8基础（一）</a>
-	
-    </h1>
-  
-
-
-  
-  
-<a href="/aggregate-paper/butian/Chrome%20V8%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/" class="archive-article-date">
-        <time datetime="2021-07-27T14:40:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-27</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>本系列文章笔者将简单介绍Chrome V8的整体模型与其主要概念和数据结构，希望能对读者理解浏览器安全相关产生帮助。</p>
-<meta name="referrer" content="no-referrer"/>
-    
-    <a class="article-more-a" href="/aggregate-paper/butian/Chrome%20V8%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">划水摸鱼</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/aggregate-paper/butian/Chrome%20V8%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/">展开全文 >></a>
+      <a class="article-more-a" href="/aggregate-paper/butian/CVE-2020-36239%20-%20Jira%20%E5%A4%9A%E6%AC%BE%E4%BA%A7%E5%93%81RCE%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">展开全文 >></a>
     </p>
     
 
@@ -1118,7 +1107,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/aggregate-paper/page/70/">&amp;laquo; Prev</a><a class="page-number" href="/aggregate-paper/">1</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/69/">69</a><a class="page-number" href="/aggregate-paper/page/70/">70</a><span class="page-number current">71</span><a class="page-number" href="/aggregate-paper/page/72/">72</a><a class="page-number" href="/aggregate-paper/page/73/">73</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/89/">89</a><a class="extend next" rel="next" href="/aggregate-paper/page/72/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/aggregate-paper/page/70/">&amp;laquo; Prev</a><a class="page-number" href="/aggregate-paper/">1</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/69/">69</a><a class="page-number" href="/aggregate-paper/page/70/">70</a><span class="page-number current">71</span><a class="page-number" href="/aggregate-paper/page/72/">72</a><a class="page-number" href="/aggregate-paper/page/73/">73</a><span class="space">&hellip;</span><a class="page-number" href="/aggregate-paper/page/104/">104</a><a class="extend next" rel="next" href="/aggregate-paper/page/72/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1257,6 +1246,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">区块链安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">安全技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">众测渗透</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">技术讨论</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">WEB安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">二进制安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">企业安全</a>
               </li>
             
             <div class="clearfix"></div>
